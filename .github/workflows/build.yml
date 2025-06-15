@@ -30,11 +30,11 @@ jobs:
         
       - name: Build for Linux/macOS
         if: runner.os != 'Windows'
-        run: gcc aimerge.c -o aimerge-${{ runner.os }}
+        run: gcc aimerge.c -o aim
         
       - name: Build for Windows
         if: runner.os == 'Windows'
-        run: gcc aimerge.c -o aimerge-windows.exe
+        run: gcc aimerge.c -o aim.exe
         
       - name: Upload artifact
         uses: actions/upload-artifact@v4
