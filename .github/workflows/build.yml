@@ -30,7 +30,7 @@ jobs:
         
       - name: Build for Linux/macOS
         if: runner.os != 'Windows'
-        run: gcc aimerge.c -o aim
+        run: gcc aimerge.c -o aim-${{ runner.os }}
         
       - name: Build for Windows
         if: runner.os == 'Windows'
