@@ -94,8 +94,6 @@ int main(int argc, char *argv[]) {
     const char *output_filename = DEFAULT_OUTPUT_FILE; // 默认输出文件名
     int opt;
 
-
-    // 处理命令行参数
     while ((opt = getopt(argc, argv, "d:b")) != -1) {
         switch (opt) {
             case 'd':
