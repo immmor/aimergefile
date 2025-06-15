@@ -50,7 +50,6 @@ void print_tree(const char* path, int depth, const char* prefix, int is_last, FI
     closedir(dir);
 }
 
-// 函数：将文件内容追加到输出文件中，并在前面加上文件名和横线
 void append_file_to_output(const char *input_filename, const char *output_filename) {
     FILE *input_file = fopen(input_filename, "r");
     if (!input_file) {
