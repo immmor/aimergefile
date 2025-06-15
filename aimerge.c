@@ -75,7 +75,6 @@ void append_file_to_output(const char *input_filename, const char *output_filena
         fprintf(output_file, "%s\n", input_filename);
     }
 
-    // 打印分隔线
     fprintf(output_file, "----------------------------------------\n");
 
     // 读取输入文件内容并写入输出文件
