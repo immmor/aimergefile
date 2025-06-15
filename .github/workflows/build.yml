@@ -1,0 +1,34 @@
+name: Build for multiple platforms
+
+on:
+  push:
+    paths:
+      - '**.c'
+      - '**.h'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y gcc
+        
+      - name: Build for Linux/macOS
+        if: runner.os != 'Windows'
+        run: gcc aimerge.c -o aimerge-${{ runner.os }}
+        
+      - name: Build for Windows
+        if: runner.os == 'Windows'
+        run: gcc aimerge.c -o aimerge-windows.exe
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aimerge-${{ runner.os }}
+          path: aimerge-${{ runner.os }}*
