@@ -16,17 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install Xcode Command Line Tools
-        if: runner.os == 'macOS'
-        run: xcode-select --install
+      # - name: Install Xcode Command Line Tools
+      #   if: runner.os == 'macOS'
+      #   run: xcode-select --install
         
-      - name: Install dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y gcc
+      # - name: Install dependencies (Linux)
+      #   if: runner.os == 'Linux'
+      #   run: sudo apt-get update && sudo apt-get install -y gcc
         
-      - name: Install dependencies (Windows)
-        if: runner.os == 'Windows'
-        run: choco install mingw -y
+      # - name: Install dependencies (Windows)
+      #   if: runner.os == 'Windows'
+      #   run: choco install mingw -y
         
       - name: Build for Linux/macOS
         if: runner.os != 'Windows'
