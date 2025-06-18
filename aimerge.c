@@ -4,6 +4,16 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <limits.h>
+
+#ifdef _WIN32
+#include <direct.h>
+#define PATH_SEPARATOR '\\'
+#define realpath(N,R) _fullpath((R),(N),_MAX_PATH)
+#else
+#define PATH_SEPARATOR '/'
+#endif
 
 #define MAX_LINE_LENGTH 1024
 #define DEFAULT_OUTPUT_FILE "aimerged.txt"
@@ -23,7 +33,7 @@ void print_tree(const char* path, int depth, const char* prefix, int is_last, FI
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
             continue;
         }
-        snprintf(full_path, MAX_LINE_LENGTH, "%s/%s", path, entry->d_name);
+        snprintf(full_path, MAX_LINE_LENGTH, "%s%c%s", path, PATH_SEPARATOR, entry->d_name);
         count++;
     }
     rewinddir(dir);
@@ -37,7 +47,8 @@ void print_tree(const char* path, int depth, const char* prefix, int is_last, FI
         snprintf(full_path, MAX_LINE_LENGTH, "%s/%s", path, entry->d_name);
         int is_last_entry = (current == count);
 
-        if (entry->d_type == DT_DIR) {
+        struct stat statbuf;
+        if (stat(full_path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode)) {
             fprintf(output_file, "%s%s%s/\n", prefix, is_last_entry ? "└── " : "├── ", entry->d_name);
             char new_prefix[100];
             snprintf(new_prefix, sizeof(new_prefix), "%s%s    ", prefix, is_last_entry ? "    " : "|   ");
@@ -122,7 +133,13 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     
-    fprintf(output_file, "当前目录: %s\n", getcwd(NULL, 0));
+    char cwd[PATH_MAX];
+#ifdef _WIN32
+    _getcwd(cwd, sizeof(cwd));
+#else
+    getcwd(cwd, sizeof(cwd));
+#endif
+    fprintf(output_file, "当前目录: %s\n", cwd);
     print_tree(getcwd(NULL, 0), 0, "", 0, output_file);
     fprintf(output_file, "\n");
     
